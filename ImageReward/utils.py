@@ -87,6 +87,7 @@ _SCORES = {
     "CLIP": "https://openaipublic.azureedge.net/clip/models/b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836/ViT-L-14.pt",
     "BLIP": "https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_large.pth",
     "Aesthetic": "https://github.com/christophschuhmann/improved-aesthetic-predictor/raw/main/sac%2Blogos%2Bava1-l14-linearMSE.pth",
+    "HPS":"hpc.pt",
 }
 
 
@@ -100,7 +101,7 @@ def _download(url: str, root: str):
     filename = os.path.basename(url)
 
     download_target = os.path.join(root, filename)
-
+    print(download_target)
     if os.path.exists(download_target) and not os.path.isfile(download_target):
         raise RuntimeError(f"{download_target} exists and is not a regular file")
 

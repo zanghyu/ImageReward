@@ -13,12 +13,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 from PIL import Image
 import clip
-from CLIPScore import CLIPScore
+from .CLIPScore import CLIPScore
 import os
 
 class HPSScore(CLIPScore):
     def __init__(self, download_root, device='cpu'):
-        super(self).__init__(download_root, device)
+        super().__init__(download_root, device)
         params = torch.load(os.path.join(download_root,'hpc.pt'))['state_dict']
-        self.model.load_state_dict(params)
+        self.clip_model.load_state_dict(params)
 
