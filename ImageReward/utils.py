@@ -23,6 +23,7 @@ from huggingface_hub import hf_hub_download
 from .models.CLIPScore import CLIPScore
 from .models.BLIPScore import BLIPScore
 from .models.AestheticScore import AestheticScore
+from .models.HPSScore import HPSScore
 
 _MODELS = {
     "ImageReward-v1.0": "https://huggingface.co/THUDM/ImageReward/blob/main/ImageReward.pt",
@@ -157,6 +158,8 @@ def load_score(name: str = "CLIP", device: Union[str, torch.device] = "cuda" if 
         state_dict = torch.load(model_path, map_location='cpu')
         model = AestheticScore(download_root=model_download_root, device=device).to(device)
         model.mlp.load_state_dict(state_dict,strict=False)
+    elif name == "HPS":
+        model = HPSScore(download_root=model_download_root, device=device).to(device)
     else:
         raise RuntimeError(f"Score {name} not found; available scores = {available_scores()}")
     
