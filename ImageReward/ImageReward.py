@@ -127,12 +127,16 @@ class ImageReward(nn.Module):
             # image encode
             if isinstance(generation, Image.Image):
                 pil_image = generation
+                image = self.preprocess(pil_image).unsqueeze(0).to(self.device) 
             elif isinstance(generation, str):
                 if os.path.isfile(generation):
                     pil_image = Image.open(generation)
+                image = self.preprocess(pil_image).unsqueeze(0).to(self.device)
+            elif isinstance(generation, torch.Tensor):
+                image = generation.unsqueeze(0)
             else:
                 raise TypeError(r'This image parameter type has not been supportted yet. Please pass PIL.Image or file path str.')
-            image = self.preprocess(pil_image).unsqueeze(0).to(self.device)
+            
             image_embeds = self.blip.visual_encoder(image)
             
             # text encode cross attention with image

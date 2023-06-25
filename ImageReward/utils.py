@@ -39,7 +39,8 @@ def ImageReward_download(url: str, root: str):
     os.makedirs(root, exist_ok=True)
     filename = os.path.basename(url)
     download_target = os.path.join(root, filename)
-    hf_hub_download(repo_id="THUDM/ImageReward", filename=filename, local_dir=root)
+    if not os.path.isfile(download_target):
+        hf_hub_download(repo_id="THUDM/ImageReward", filename=filename, local_dir=root)
     return download_target
 
 
@@ -62,10 +63,11 @@ def load(name: str = "ImageReward-v1.0", device: Union[str, torch.device] = "cud
     model : torch.nn.Module
         The ImageReward model
     """
-    if name in _MODELS:
+
+    if os.path.isfile(os.path.join("/root/.cache/ImageReward",name+'.pt')):
+        model_path = os.path.join("/root/.cache/ImageReward",name+'.pt')
+    elif name in _MODELS:
         model_path = ImageReward_download(_MODELS[name], download_root or os.path.expanduser("~/.cache/ImageReward"))
-    elif os.path.isfile(name):
-        model_path = name
     else:
         raise RuntimeError(f"Model {name} not found; available models = {available_models()}")
 
